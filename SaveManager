@@ -176,6 +176,10 @@ local SaveManager = {} do
 				end
 			end
 		end
+
+		table.sort(out, function(a, b)
+			return a:lower() < b:lower()
+		end)
 		
 		return out
 	end
@@ -203,8 +207,26 @@ local SaveManager = {} do
 
 		local section = tab:AddRightGroupbox('Configuration')
 
+		local function SyncConfigList(preferred)
+			local values = self:RefreshConfigList()
+			local current = preferred
+
+			Options.SaveManager_ConfigList:SetValues(values)
+
+			if current and not table.find(values, current) then
+				current = nil
+			end
+
+			if (not current) and #values > 0 then
+				current = values[1]
+			end
+
+			Options.SaveManager_ConfigList:SetValue(current)
+		end
+
 		section:AddInput('SaveManager_ConfigName',    { Text = 'Config name' })
 		section:AddDropdown('SaveManager_ConfigList', { Text = 'Config list', Values = self:RefreshConfigList(), AllowNull = true })
+		SyncConfigList(nil)
 
 		section:AddDivider()
 
@@ -222,10 +244,12 @@ local SaveManager = {} do
 
 			self.Library:Notify(string.format('Created config %q', name))
 
-			Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
-			Options.SaveManager_ConfigList:SetValue(nil)
+			SyncConfigList(name)
 		end):AddButton('Load config', function()
 			local name = Options.SaveManager_ConfigList.Value
+			if not name or name == '' then
+				return self.Library:Notify('Select a config first', 2)
+			end
 
 			local success, err = self:Load(name)
 			if not success then
@@ -237,6 +261,9 @@ local SaveManager = {} do
 
 		section:AddButton('Overwrite config', function()
 			local name = Options.SaveManager_ConfigList.Value
+			if not name or name == '' then
+				return self.Library:Notify('Select a config first', 2)
+			end
 
 			local success, err = self:Save(name)
 			if not success then
@@ -247,12 +274,14 @@ local SaveManager = {} do
 		end)
 
 		section:AddButton('Refresh list', function()
-			Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
-			Options.SaveManager_ConfigList:SetValue(nil)
+			SyncConfigList(Options.SaveManager_ConfigList.Value)
 		end)
 
 		section:AddButton('Set as autoload', function()
 			local name = Options.SaveManager_ConfigList.Value
+			if not name or name == '' then
+				return self.Library:Notify('Select a config first', 2)
+			end
 			writefile(self.Folder .. '/settings/autoload.txt', name)
 			SaveManager.AutoloadLabel:SetText('Current autoload config: ' .. name)
 			self.Library:Notify(string.format('Set %q to auto load', name))
