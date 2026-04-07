@@ -40,11 +40,11 @@ local Library = {
 
     HudRegistry = {};
 
-    FontColor = Color3.fromRGB(242, 246, 255);
-    MainColor = Color3.fromRGB(22, 28, 39);
+    FontColor = Color3.fromRGB(236, 241, 249);
+    MainColor = Color3.fromRGB(18, 23, 32);
     BackgroundColor = Color3.fromRGB(9, 12, 18);
-    AccentColor = Color3.fromRGB(255, 191, 96);
-    OutlineColor = Color3.fromRGB(58, 68, 86);
+    AccentColor = Color3.fromRGB(86, 190, 255);
+    OutlineColor = Color3.fromRGB(38, 47, 62);
     RiskColor = Color3.fromRGB(255, 108, 108),
 
     Black = Color3.fromRGB(4, 6, 10);
@@ -219,9 +219,9 @@ end;
 
 function Library:GetAccentGradient()
     return ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Library.AccentColor:Lerp(Color3.new(1, 1, 1), 0.18)),
+        ColorSequenceKeypoint.new(0, Library.AccentColor:Lerp(Color3.new(1, 1, 1), 0.08)),
         ColorSequenceKeypoint.new(0.55, Library.AccentColor),
-        ColorSequenceKeypoint.new(1, Library.AccentColorDark),
+        ColorSequenceKeypoint.new(1, Library.AccentColor:Lerp(Library.MainColor, 0.26)),
     });
 end;
 
@@ -491,12 +491,12 @@ end;
 
 function Library:RefreshDerivedColors()
     Library.AccentColorDark = Library:GetDarkerColor(Library.AccentColor);
-    Library.AccentColorSoft = Library.AccentColor:Lerp(Library.MainColor, 0.74);
-    Library.SurfaceColor = Library.MainColor:Lerp(Color3.new(1, 1, 1), 0.07);
+    Library.AccentColorSoft = Library.AccentColor:Lerp(Library.MainColor, 0.86);
+    Library.SurfaceColor = Library.MainColor:Lerp(Color3.new(1, 1, 1), 0.045);
     Library.SurfaceColorDark = Library.MainColor:Lerp(Library.Black, 0.18);
-    Library.SurfaceColorLight = Library.MainColor:Lerp(Color3.new(1, 1, 1), 0.16);
-    Library.BackgroundColorLight = Library.BackgroundColor:Lerp(Library.MainColor, 0.56);
-    Library.OutlineSoftColor = Library.OutlineColor:Lerp(Library.MainColor, 0.38);
+    Library.SurfaceColorLight = Library.MainColor:Lerp(Color3.new(1, 1, 1), 0.08);
+    Library.BackgroundColorLight = Library.BackgroundColor:Lerp(Library.MainColor, 0.38);
+    Library.OutlineSoftColor = Library.OutlineColor:Lerp(Library.MainColor, 0.28);
 end;
 
 Library:RefreshDerivedColors();
@@ -1634,12 +1634,12 @@ do
             local Accent = Library:Create('Frame', {
                 Position = UDim2.fromOffset(1, 1);
                 Size = UDim2.new(1, -2, 1, -2);
-                BackgroundTransparency = 0.9;
+                BackgroundTransparency = 0.95;
                 ZIndex = 7;
                 Parent = Inner;
             });
 
-            Library:StyleAccentFill(Accent, 9, 0.9);
+            Library:StyleAccentFill(Accent, 9, 0.95);
 
             Library:Create('Frame', {
                 BackgroundColor3 = Color3.new(1, 1, 1);
@@ -1665,7 +1665,7 @@ do
 
             Outer.MouseEnter:Connect(function()
                 Library:Tween(Accent, TweenInfo.new(0.14, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    BackgroundTransparency = 0.84;
+                    BackgroundTransparency = 0.91;
                 });
                 Library:Tween(Inner, TweenInfo.new(0.14, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Library.SurfaceColorLight;
@@ -1674,7 +1674,7 @@ do
 
             Outer.MouseLeave:Connect(function()
                 Library:Tween(Accent, TweenInfo.new(0.14, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    BackgroundTransparency = 0.9;
+                    BackgroundTransparency = 0.95;
                 });
                 Library:Tween(Inner, TweenInfo.new(0.14, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Library.SurfaceColor;
@@ -1720,12 +1720,12 @@ do
 
                 if Button.Accent then
                     Library:Tween(Button.Accent, TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        BackgroundTransparency = 0.72;
+                        BackgroundTransparency = 0.82;
                     });
                     task.delay(0.1, function()
                         if Button.Accent and Button.Accent.Parent then
                             Library:Tween(Button.Accent, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                                BackgroundTransparency = 0.84;
+                                BackgroundTransparency = 0.91;
                             });
                         end;
                     end);
@@ -2065,12 +2065,12 @@ do
         local ToggleAccent = Library:Create('Frame', {
             Position = UDim2.fromOffset(1, 1);
             Size = UDim2.new(1, -2, 1, -2);
-            BackgroundTransparency = 0.82;
+            BackgroundTransparency = 0.96;
             ZIndex = 7;
             Parent = ToggleInner;
         });
 
-        Library:StyleAccentFill(ToggleAccent, 8, 0.82);
+        Library:StyleAccentFill(ToggleAccent, 8, 0.92);
 
         local ToggleKnob = Library:Create('Frame', {
             AnchorPoint = Vector2.new(0, 0.5);
@@ -2146,7 +2146,7 @@ do
                 BackgroundColor3 = Toggle.Value and Library.AccentColorSoft or Library.SurfaceColor;
             });
             Library:Tween(ToggleAccent, TweenInfo.new(0.16, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                BackgroundTransparency = Toggle.Value and 0.2 or 0.82;
+                BackgroundTransparency = Toggle.Value and 0.6 or 0.92;
             });
             Library:Tween(ToggleKnob, TweenInfo.new(0.16, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                 Position = UDim2.new(0, KnobOffset, 0.5, 0);
@@ -2645,12 +2645,12 @@ do
                 local SelectedFill = Library:Create('Frame', {
                     Position = UDim2.fromOffset(1, 1);
                     Size = UDim2.new(1, -2, 1, -2);
-                    BackgroundTransparency = 0.92;
+                    BackgroundTransparency = 0.96;
                     ZIndex = 24;
                     Parent = Button;
                 });
 
-                Library:StyleAccentFill(SelectedFill, 7, 0.92);
+                Library:StyleAccentFill(SelectedFill, 7, 0.96);
 
                 local ButtonLabel = Library:CreateLabel({
                     Active = false;
@@ -2716,7 +2716,7 @@ do
                     end;
 
                     Library:Tween(SelectedFill, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        BackgroundTransparency = Selected and 0.22 or 0.92;
+                        BackgroundTransparency = Selected and 0.68 or 0.94;
                     });
                 end;
 
@@ -3405,7 +3405,7 @@ function Library:CreateWindow(...)
             Parent = TabButton;
         });
 
-        Library:StyleAccentFill(TabAccent, 9, 0.92);
+        Library:StyleAccentFill(TabAccent, 9, 0.96);
 
         local TabFrame;
 
@@ -3421,7 +3421,7 @@ function Library:CreateWindow(...)
         TabButton.MouseEnter:Connect(function()
             if (not TabFrame) or not TabFrame.Visible then
                 Library:Tween(TabAccent, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    BackgroundTransparency = 0.84;
+                    BackgroundTransparency = 0.9;
                 });
             end;
         end);
@@ -3429,7 +3429,7 @@ function Library:CreateWindow(...)
         TabButton.MouseLeave:Connect(function()
             if (not TabFrame) or not TabFrame.Visible then
                 Library:Tween(TabAccent, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    BackgroundTransparency = 0.92;
+                    BackgroundTransparency = 0.96;
                 });
             end;
         end);
@@ -3516,7 +3516,7 @@ function Library:CreateWindow(...)
             TabButtonStroke.Color = Library.AccentColorDark;
             TabButtonLabel.TextColor3 = Color3.fromRGB(255, 248, 231);
             Library:Tween(TabAccent, TweenInfo.new(0.14, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                BackgroundTransparency = 0.14;
+                BackgroundTransparency = 0.7;
             });
             Library.RegistryMap[TabButton].Properties.BackgroundColor3 = function()
                 return TabFrame.Visible and Library.AccentColorSoft or Library.SurfaceColor;
@@ -3536,7 +3536,7 @@ function Library:CreateWindow(...)
             TabButtonStroke.Color = Library.OutlineSoftColor;
             TabButtonLabel.TextColor3 = Library.FontColor;
             Library:Tween(TabAccent, TweenInfo.new(0.14, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                BackgroundTransparency = 0.92;
+                BackgroundTransparency = 0.96;
             });
             Library.RegistryMap[TabButton].Properties.BackgroundColor3 = function()
                 return TabFrame.Visible and Library.AccentColorSoft or Library.SurfaceColor;
@@ -3705,7 +3705,7 @@ function Library:CreateWindow(...)
                     Parent = Button;
                 });
 
-                Library:StyleAccentFill(ButtonAccent, 8, 0.92);
+                Library:StyleAccentFill(ButtonAccent, 8, 0.96);
 
                 local Container;
 
@@ -3721,7 +3721,7 @@ function Library:CreateWindow(...)
                 Button.MouseEnter:Connect(function()
                     if (not Container) or not Container.Visible then
                         Library:Tween(ButtonAccent, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                            BackgroundTransparency = 0.84;
+                            BackgroundTransparency = 0.9;
                         });
                     end;
                 end);
@@ -3729,7 +3729,7 @@ function Library:CreateWindow(...)
                 Button.MouseLeave:Connect(function()
                     if (not Container) or not Container.Visible then
                         Library:Tween(ButtonAccent, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                            BackgroundTransparency = 0.92;
+                            BackgroundTransparency = 0.96;
                         });
                     end;
                 end);
@@ -3775,7 +3775,7 @@ function Library:CreateWindow(...)
                     ButtonStroke.Color = Library.AccentColorDark;
                     ButtonLabel.TextColor3 = Color3.fromRGB(255, 248, 231);
                     Library:Tween(ButtonAccent, TweenInfo.new(0.14, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        BackgroundTransparency = 0.14;
+                        BackgroundTransparency = 0.7;
                     });
                     Library.RegistryMap[Button].Properties.BackgroundColor3 = function()
                         return Container.Visible and Library.AccentColorSoft or Library.SurfaceColor;
@@ -3798,7 +3798,7 @@ function Library:CreateWindow(...)
                     ButtonStroke.Color = Library.OutlineSoftColor;
                     ButtonLabel.TextColor3 = Library.FontColor;
                     Library:Tween(ButtonAccent, TweenInfo.new(0.14, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        BackgroundTransparency = 0.92;
+                        BackgroundTransparency = 0.96;
                     });
                     Library.RegistryMap[Button].Properties.BackgroundColor3 = function()
                         return Container.Visible and Library.AccentColorSoft or Library.SurfaceColor;
